@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  main:
+    build: .
+    volumes:
+      - ./bot:/usr/src/bot:rw
+    command: ["python3", "main.py"]
+    environment:
+      - TOKEN=value
+      - GUILD=value
+      - MARIADBDB_PASSWORD=${MARIADB_PASSWORD} 
+      - MARIADB_DATABASE=${MARIADBDB_DATABASE}
+      - MARIADBDB_USER=${MARIADB_USER}
+
+  db:
+    image: mariadb:10.8.3-jammy
+    volumes:
+      - ./data:/var/lib/MARIADB:rw
+    ports:
+      - 4646:3306
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD} 
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD} 
+      - MARIADB_USER=${MARIADB_USER}
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      
