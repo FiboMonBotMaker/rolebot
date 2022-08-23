@@ -1,18 +1,32 @@
-from lib.dbutil import create_talbe, primary_key, delete, insert
-from discord import Interaction, Role, ButtonStyle, InputTextStyle, Colour, ApplicationCommandError
-from discord.ui import Button, View, Select, InputText, Modal, button
-from views.modelutil import get_roles, get_select_options
+from lib.dbutil import delete, insert
+from lib.guild_role import get_role_dict
+from discord import Interaction, Role, ButtonStyle, InputTextStyle, Colour, ApplicationCommandError, SelectOption
+from discord.ui import Button,  Select, InputText, Modal, button
+from views.baseview import BaseView
 
 
-# DataBaseがそもそも動いてなかったらここで止まると思われる
-create_talbe(
-    table_name="roles",
-    columns=[
-        "guild_id bigint",
-        "role_id bigint",
-        "INDEX guids_index(guild_id)",
-        primary_key(["guild_id", "role_id"])
-    ])
+def get_select_options(roles: list[int], guild_roles: list[Role], guild_id: int):
+    options = []
+    if len(roles) == 0:
+        raise ApplicationCommandError("Role data is zero length")
+
+    guild_role_dict = get_role_dict(guild_roles=guild_roles)
+    del_role_list = []
+    for r in roles:
+        try:
+            options.append(
+                SelectOption(
+                    label=guild_role_dict[r],
+                    value=str(r),
+                )
+            )
+        except KeyError:
+            del_role_list.append(r)
+    if len(del_role_list) != 0:
+        del_roles = "".join([str(v) for v in del_role_list])
+        delete(table_name="roles",
+               where=f"guild_id = {guild_id} AND role_id IN({del_roles})")
+    return options
 
 
 def delete_role(guild_id: int, role_id: int):
@@ -29,17 +43,7 @@ def insert_role(guild_id: int, role_id: int):
     )
 
 
-class AdminBaseView(View):
-    def __init__(self, guild_id):
-        super().__init__(timeout=180)
-        self.roles = get_roles(guild_id=guild_id)
-
-    @button(label="Exit", row=4, style=ButtonStyle.red)
-    async def exit_menu(self, _: Button, interaction: Interaction):
-        await interaction.response.edit_message(content="Bye", view=None)
-
-
-class AdminReturnBaseView(AdminBaseView):
+class AdminReturnBaseView(BaseView):
     def __init__(self, guild_id):
         super().__init__(guild_id=guild_id)
 
@@ -48,7 +52,7 @@ class AdminReturnBaseView(AdminBaseView):
         await interaction.response.edit_message(content="*Main Menu*", view=AdminMainView(interaction.guild_id))
 
 
-class AdminMainView(AdminBaseView):
+class AdminMainView(BaseView):
     def __init__(self, guild_id):
         super().__init__(guild_id=guild_id)
 
@@ -56,7 +60,6 @@ class AdminMainView(AdminBaseView):
     async def add_role(self, _: Button, interaction: Interaction):
         m = AddingRoleModal()
         await interaction.response.send_modal(modal=m)
-        await interaction.edit_original_message(content="Send modal", view=None)
 
     @button(label="Remove Role", row=1, style=ButtonStyle.blurple)
     async def remove_role(self, _: Button, interaction: Interaction):
@@ -77,6 +80,7 @@ class RemoveRoleView(AdminReturnBaseView):
             RemoveRoleSelect.get_instance(
                 roles=self.roles,
                 guild_roles=guild_roles,
+                guild_id=guild_id
             )
         )
 
@@ -91,8 +95,9 @@ class RemoveRoleSelect(Select["RemoveRoleView"]):
         v = AdminMainView(guild_id=interaction.guild_id)
         await interaction.response.edit_message(content=f"Removed the Role: **{role_name}**", view=v)
 
-    def get_instance(roles: list[int], guild_roles: list[Role]):
-        options = get_select_options(roles=roles, guild_roles=guild_roles)
+    def get_instance(roles: list[int], guild_roles: list[Role], guild_id: int):
+        options = get_select_options(
+            roles=roles, guild_roles=guild_roles, guild_id=guild_id)
         return RemoveRoleSelect(placeholder="Select Role to Remove", options=options)
 
 
@@ -128,7 +133,6 @@ class AddingRoleModal(Modal):
         new_role = await interaction.guild.create_role(name=role_name, color=role_color)
         insert_role(interaction.guild_id, new_role.id)
         await interaction.response.send_message(
-            content=f"Adding role! **{new_role.name}**\n*Main Menu*",
-            view=AdminMainView(interaction.guild_id),
+            content=f"Adding role! <@&{new_role.id}>",
             ephemeral=True
         )

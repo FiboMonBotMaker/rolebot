@@ -57,6 +57,8 @@ def delete(table_name: str, where):
     print(sql)
     try:
         connection.cursor().execute(sql)
+        connection.commit()
+        connection.close()
     except MySQLdb.Error as e:
         raise e
 
@@ -83,15 +85,6 @@ def insert(table_name: str, columins: list[str] = [], values: list[list[str]] = 
         connection.cursor().execute(sql)
         connection.commit()
         connection.close()
-    except MySQLdb.Error as e:
-        raise e
-
-
-def create_index(index_name: str, table_name: str, column_name: str):
-    connection = get_connection()
-    sql = f"CREATE INDEX {index_name} ON {table_name}({column_name})"
-    try:
-        connection.cursor().execute(sql)
     except MySQLdb.Error as e:
         raise e
 

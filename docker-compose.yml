@@ -11,7 +11,7 @@ services:
     environment:
       - TOKEN=${TOKEN}
       - GUILD=${GUILD}
-      - GUILD=${GUILD2}
+      - GUILD2=${GUILD2}
       - MARIADB_PASSWORD=${MARIADB_PASSWORD} 
       - MARIADB_DATABASE=${MARIADB_DATABASE}
       - MARIADB_USER=${MARIADB_USER}
