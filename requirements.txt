@@ -1,2 +1,2 @@
-py-cord == 2.0.0
+py-cord[speed] == 2.0.1
 mysqlclient == 2.1.1
