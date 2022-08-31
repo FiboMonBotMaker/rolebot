@@ -32,7 +32,7 @@ def get_select_options(roles: list[int], member_roles: list[Role], guild_roles: 
         except KeyError:
             del_role_list.append(r)
     if len(del_role_list) != 0:
-        del_roles = "".join([str(v) for v in del_role_list])
+        del_roles = ",".join([str(v) for v in del_role_list])
         delete(table_name="roles",
                where=f"guild_id = {guild_id} AND role_id IN({del_roles})")
     return options
@@ -54,9 +54,9 @@ class RoleListEmbed(BaseEmbed):
             name=name,
             icon_url=icon_url,
             color=Colour.brand_green(),
-            title=lang["title"])
+            title=lang["member"]["embed"]["title"])
         self._set_embed_fields(
-            lang=lang,
+            lang=lang["member"]["embed"],
             member_roles=member_roles,
             roles=roles,
             guild_roles=guild_roles,
@@ -78,7 +78,7 @@ class RoleListEmbed(BaseEmbed):
             except KeyError:
                 del_role_list.append(r)
         if len(del_role_list) != 0:
-            del_roles = "".join([str(v) for v in del_role_list])
+            del_roles = ",".join([str(v) for v in del_role_list])
             delete(table_name="roles",
                    where=f"guild_id = {guild_id} AND role_id IN({del_roles})")
 
@@ -86,6 +86,7 @@ class RoleListEmbed(BaseEmbed):
 class MemberReturnBaseView(BaseView):
     def __init__(self, lang: dict, guild_id: int):
         super().__init__(guild_id=guild_id, lang=lang)
+        self.add_item(self.MainMenuButton(lang=lang))
 
     class MainMenuButton(Button):
         def __init__(self, lang):
@@ -97,18 +98,20 @@ class MemberReturnBaseView(BaseView):
             )
 
         async def callback(self, interaction: Interaction):
-            v = MemberMainView(
+            view = MemberMainView(
+                lang=self.lang,
                 guild_id=interaction.guild_id,
             )
             embed = RoleListEmbed(
+                lang=self.lang,
                 name=interaction.user.name,
                 icon_url=interaction.user.avatar.url if interaction.user.avatar != None else "",
-                roles=v.roles,
+                roles=view.roles,
                 member_roles=interaction.user.roles,
                 guild_roles=interaction.guild.roles,
                 guild_id=interaction.guild_id
             )
-            await interaction.response.edit_message(view=v, embed=embed)
+            await interaction.response.edit_message(view=view, embed=embed)
 
 
 class MemberMainView(BaseView):

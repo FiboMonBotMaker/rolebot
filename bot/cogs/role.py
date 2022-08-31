@@ -19,20 +19,20 @@ class LanaNealsen(commands.Cog):
     )
     async def check(self, ctx: ApplicationContext):
         lang = get_lang(ctx.locale)
-        v = MemberMainView(
+        view = MemberMainView(
             lang=lang,
             guild_id=str(ctx.guild_id),
         )
         embed = RoleListEmbed(
-            lang=lang["member"]["embed"],
+            lang=lang,
             name=ctx.author.name,
             icon_url=ctx.user.avatar.url if ctx.user.avatar != None else "",
-            roles=v.roles,
+            roles=view.roles,
             member_roles=ctx.author.roles,
             guild_roles=ctx.guild.roles,
             guild_id=ctx.guild_id
         )
-        await ctx.respond(embed=embed, view=v, ephemeral=True)
+        await ctx.respond(embed=embed, view=view, ephemeral=True)
 
     @role.command(
         name="control",
@@ -42,11 +42,11 @@ class LanaNealsen(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def control(self, ctx: ApplicationContext):
         lang = get_lang(ctx.locale)
-        v = AdminMainView(
+        view = AdminMainView(
             lang=lang,
             guild_id=str(ctx.guild_id),
         )
-        await ctx.respond(embed=Embed(color=Color.green(), title=lang['admin']['main']['title']), view=v, ephemeral=True)
+        await ctx.respond(embed=Embed(color=Color.green(), title=lang['admin']['main']['title']), view=view, ephemeral=True)
 
 
 def setup(bot):
