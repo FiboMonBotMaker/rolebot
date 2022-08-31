@@ -1,0 +1,58 @@
+# Set the locale according to the discord reference.
+# https://discord.com/developers/docs/reference#locales
+locale: en-US
+var:
+  - &adding Adding role
+  - &remove Remove role
+  - &mainmenu Main men
+command:
+  check: You can manage the roles attached to you.
+  control: This command is for administrators. You can add roles, etc.
+base:
+  button: Exit
+  message: Bye
+admin:
+  base:
+    title: *mainmenu
+    button: *mainmenu
+  main:
+    title: *mainmenu
+    button:
+      adding: *adding
+      remove: *remove
+  adding:
+    modal:
+      title: *adding
+      rolename:
+        title: Role name
+        placeholder: SuperMario
+      rolecolor:
+        title: Role color
+        placeholder: FF0000
+      execute: Created role
+  remove:
+    title: *remove
+    select:
+      execute: Removed the role
+      placeholder: Select role to remove
+member:
+  base:
+    title: *mainmenu
+    button: *mainmenu
+  main:
+    title: The role that belongs to you
+    button: Edit role
+  edit:
+    title: Edit menu
+    select:
+      placeholder: Select role
+      enable: "Set role: {}"
+      disable: "Disabled role: {}"
+  embed:
+    title: The Role that belongs to you
+    field:
+      enable: enable
+      disable: disable
+error:
+  permisson: Error due to authorization. Contact your administrator to verify that the settings are correct.
+  zerolength: There are zero roles set for managed roles.
