@@ -74,7 +74,7 @@ class RoleListEmbed(BaseEmbed):
                         name=f":white_check_mark: {guild_role_dict[r]}", value=lang["field"]["enable"], inline=False))
                 else:
                     self.append_field(EmbedField(
-                        name=f":octagonal_sign: {guild_role_dict[r]}", value=lang["field"]["enable"], inline=False))
+                        name=f":octagonal_sign: {guild_role_dict[r]}", value=lang["field"]["disable"], inline=False))
             except KeyError:
                 del_role_list.append(r)
         if len(del_role_list) != 0:
