@@ -53,8 +53,8 @@ class AdminReturnBaseView(BaseView):
 
 
 class AdminMainView(BaseView):
-    def __init__(self, guild_id):
-        super().__init__(guild_id=guild_id)
+    def __init__(self, lang: dict, guild_id: int):
+        super().__init__(guild_id=guild_id, lang=lang)
 
     @button(label="Addition Role", row=0, style=ButtonStyle.blurple)
     async def add_role(self, _: Button, interaction: Interaction):
@@ -74,8 +74,8 @@ class AdminMainView(BaseView):
 
 
 class RemoveRoleView(AdminReturnBaseView):
-    def __init__(self, guild_id, guild_roles):
-        super().__init__(guild_id=guild_id)
+    def __init__(self, lang: dict, guild_id: int, guild_roles: list[Role]):
+        super().__init__(guild_id=guild_id, lang=lang)
         self.add_item(
             RemoveRoleSelect.get_instance(
                 roles=self.roles,

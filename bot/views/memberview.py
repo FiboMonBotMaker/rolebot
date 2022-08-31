@@ -80,8 +80,8 @@ class RoleListEmbed(BaseEmbed):
 
 
 class MemberReturnBaseView(BaseView):
-    def __init__(self, guild_id):
-        super().__init__(guild_id=guild_id)
+    def __init__(self, lang: dict, guild_id: int):
+        super().__init__(guild_id=guild_id, lang=lang)
 
     @button(label="Main menu", row=3, style=ButtonStyle.grey)
     async def main_menu(self, _: Button, interaction: Interaction):
@@ -100,8 +100,8 @@ class MemberReturnBaseView(BaseView):
 
 
 class MemberMainView(BaseView):
-    def __init__(self, guild_id):
-        super().__init__(guild_id=guild_id)
+    def __init__(self, lang: dict, guild_id: int):
+        super().__init__(guild_id=guild_id, lang=lang)
 
     @button(label="Edit role", row=0, style=ButtonStyle.green)
     async def edit_role(self, _: Button, interaction: Interaction):
@@ -134,8 +134,8 @@ class EditRoleSelect(Select["EditRoleView"]):
 
 
 class EditRoleView(MemberReturnBaseView):
-    def __init__(self, guild_id: int, guild_roles: list[Role], member_roles: list[Role]):
-        super().__init__(guild_id=guild_id)
+    def __init__(self, lang: dict, guild_id: int, guild_roles: list[Role], member_roles: list[Role]):
+        super().__init__(guild_id=guild_id,lang=lang)
         self.add_item(
             EditRoleSelect.get_instance(
                 roles=self.roles,

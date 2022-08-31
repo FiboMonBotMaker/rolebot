@@ -1,0 +1,37 @@
+# Set the locale according to the discord reference.
+# https://discord.com/developers/docs/reference#locales
+locale: en
+&adding: Addition Role
+&remove: Remove Role
+&mainmenu: Remove Menu
+command:
+  check: You can manage the roles attached to you.
+  control: This command is for administrators. You can add roles, etc.
+base:
+  exit: Exit
+admin:
+  base:
+    button: *mainmenu
+  menu:
+    main:
+      title: *mainmenu
+      button:
+        adding: *adding
+        remove: *remove
+      error:
+    remove:
+      title: *remove
+      view:
+        execute: Removed the Role
+        placeholder: Select Role to Remove
+member:
+  base:
+    button: *mainmenu
+  menu:
+    main:
+      title: The Role that belongs to you
+    button:
+      edit: Edit role
+    view:
+      success: Success !
+      placeholder: Select Role

@@ -2,7 +2,8 @@ from views.adminview import AdminMainView
 from views.memberview import MemberMainView, RoleListEmbed
 from discord.commands import SlashCommandGroup
 from discord.ext import commands
-from discord import ApplicationContext, EmbedField, File
+from discord import ApplicationContext
+from lib.locale import get_command_description, get_default_command_description, get_lang
 
 
 class LanaNealsen(commands.Cog):
@@ -11,9 +12,15 @@ class LanaNealsen(commands.Cog):
 
     role = SlashCommandGroup(name="role", description="Manage roles")
 
-    @role.command(name="check_role", description="You can manage the roles attached to you.")
+    @role.command(
+        name="check",
+        description=get_default_command_description("check"),
+        description_localizations=get_command_description("check")
+    )
     async def check(self, ctx: ApplicationContext):
+        lang = get_lang(ctx.locale)
         v = MemberMainView(
+            lang=lang,
             guild_id=str(ctx.guild_id),
         )
         embed = RoleListEmbed(
@@ -26,14 +33,19 @@ class LanaNealsen(commands.Cog):
         )
         await ctx.respond(embed=embed, view=v, ephemeral=True)
 
-    @role.command(name="control", description="This command is for administrators. You can add roles, etc.")
+    @role.command(
+        name="control",
+        description=get_default_command_description("control"),
+        description_localizations=get_command_description("control")
+    )
     @commands.has_permissions(administrator=True)
     async def control(self, ctx: ApplicationContext):
-        ctx.bot.get_guild(ctx.guild_id).roles
+        lang = get_lang(ctx.locale)
         v = AdminMainView(
+            lang=lang,
             guild_id=str(ctx.guild_id),
         )
-        await ctx.respond(content="*Main Menu*", view=v, ephemeral=True)
+        await ctx.respond(content=f"*{lang['admin']['menu']['main']['title']}*", view=v, ephemeral=True)
 
 
 def setup(bot):

@@ -3,7 +3,7 @@ from discord import Interaction, ButtonStyle
 from discord.ui import Button, View, button
 
 
-def get_roles(guild_id: str) -> list[int]:
+def get_roles(guild_id: int) -> list[int]:
     rows = select(table_name="roles", columns=["role_id"],
                   where=f"guild_id = {guild_id}")
     roles = []
@@ -13,8 +13,9 @@ def get_roles(guild_id: str) -> list[int]:
 
 
 class BaseView(View):
-    def __init__(self, guild_id):
+    def __init__(self, lang: dict, guild_id: int):
         super().__init__(timeout=300)
+        self.lang = lang
         self.roles = get_roles(guild_id=guild_id)
 
     @button(label="Exit", row=4, style=ButtonStyle.red)
