@@ -2,7 +2,7 @@ from views.adminview import AdminMainView
 from views.memberview import MemberMainView, RoleListEmbed
 from discord.commands import SlashCommandGroup
 from discord.ext import commands
-from discord import ApplicationContext
+from discord import ApplicationContext, Embed, Color
 from lib.locale import get_command_description, get_default_command_description, get_lang
 
 
@@ -24,8 +24,9 @@ class LanaNealsen(commands.Cog):
             guild_id=str(ctx.guild_id),
         )
         embed = RoleListEmbed(
+            lang=lang["member"]["embed"],
             name=ctx.author.name,
-            icon_url=ctx.author.avatar.url,
+            icon_url=ctx.user.avatar.url if ctx.user.avatar != None else "",
             roles=v.roles,
             member_roles=ctx.author.roles,
             guild_roles=ctx.guild.roles,
@@ -45,7 +46,7 @@ class LanaNealsen(commands.Cog):
             lang=lang,
             guild_id=str(ctx.guild_id),
         )
-        await ctx.respond(content=f"*{lang['admin']['menu']['main']['title']}*", view=v, ephemeral=True)
+        await ctx.respond(embed=Embed(color=Color.green(), title=lang['admin']['main']['title']), view=v, ephemeral=True)
 
 
 def setup(bot):

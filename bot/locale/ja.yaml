@@ -1,37 +1,58 @@
 # ディスコードのリファレンスに準拠したlocaleを設定します。
 # https://discord.com/developers/docs/reference#locales
 locale: ja
-&adding: ロールの追加
-&remove: ロールの削除
-&mainmenu: メインメニュー
+var:
+  - &adding ロールの追加
+  - &remove ロールの削除
+  - &mainmenu メインメニュー
 command:
   check: あなたのロールの確認、付替ができます。
   control: このコマンドは管理者用です。ロールの作成などが行なえます。
 base:
-  exit: 閉じる
+  button: 閉じる
+  message: おつかれさまでした
 admin:
   base:
+    title: *mainmenu
     button: *mainmenu
-  menu:
-    main:
-      title: *mainmenu
-      button:
-        adding: *adding
-        remove: *remove
-      error:
-    remove:
-      title: *remove
-      view:
-        execute: ロールを削除しました
-        placeholder: 削除するロールを選択
+  main:
+    title: *mainmenu
+    button:
+      adding: *adding
+      remove: *remove
+  adding:
+    modal:
+      title: *adding
+      rolename:
+        title: ロール名
+        placeholder: メトロイド系男子
+      rolecolor:
+        title: ロールの色
+        placeholder: FF0000
+      execute: ロールを作成しました！
+  remove:
+    title: *remove
+    select:
+      execute: ロールを削除しました
+      placeholder: 削除するロールを選択
 member:
   base:
+    title: *mainmenu
     button: *mainmenu
-  menu:
-    main:
-      title: 現在のあなたのロール
-    button:
-      edit: ロールの付け替え
-    view:
-      success: 変更が成功しました
-      placeholder: ロールを選択
+  main:
+    title: 現在のあなたのロール
+    button: ロールの編集
+  edit:
+    title: ロールの編集
+    select:
+      placeholder: ロールの選択
+      enable: "{} をセットしたよ"
+      disable: "{} を解除したよ"
+  embed:
+    title: 現在のあなたのロール
+    field:
+      enable: 有効
+      disable: 無効
+error:
+  permisson: 権限によりエラーです。管理者に問い合わせて正しく設定されているか確認してください。
+  zerolength: 管理対象ロールに設定されているロールがゼロです。
