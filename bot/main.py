@@ -18,8 +18,10 @@ create_talbe(
 
 
 intent = discord.Intents.all()
-bot = commands.Bot(debug_guilds=[os.getenv(
-    'GUILD'), os.getenv('GUILD2')], intent=intent)
+bot = commands.Bot(
+    debug_guilds=os.getenv("GUILDS").split(","),
+    intent=intent
+)
 TOKEN = os.getenv('TOKEN')
 
 path = "./cogs"

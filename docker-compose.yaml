@@ -10,8 +10,7 @@ services:
       - ./bot:/usr/src/bot:rw
     environment:
       - TOKEN=${TOKEN}
-      - GUILD=${GUILD}
-      - GUILD2=${GUILD2}
+      - GUILDS=${GUILDS}
       - MARIADB_PASSWORD=${MARIADB_PASSWORD} 
       - MARIADB_DATABASE=${MARIADB_DATABASE}
       - MARIADB_USER=${MARIADB_USER}
