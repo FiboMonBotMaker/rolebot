@@ -2,8 +2,9 @@ from views.adminview import AdminMainView
 from views.memberview import MemberMainView, RoleListEmbed
 from discord.commands import SlashCommandGroup
 from discord.ext import commands
-from discord import ApplicationContext, Embed, Color
+from discord import ApplicationContext, Embed, Color, Permissions
 from lib.locale import get_command_description, get_default_command_description, get_lang
+Permissions.administrator
 
 
 class LanaNealsen(commands.Cog):
@@ -11,6 +12,12 @@ class LanaNealsen(commands.Cog):
         self.bot = bot
 
     role = SlashCommandGroup(name="role", description="Manage roles")
+
+    admin = role.create_subgroup(
+        name="admin",
+        description="Admin commands",
+        checks=[commands.has_permissions(administrator=True).predicate]
+    )
 
     @role.command(
         name="check",
@@ -34,12 +41,11 @@ class LanaNealsen(commands.Cog):
         )
         await ctx.respond(embed=embed, view=view, ephemeral=True)
 
-    @role.command(
+    @admin.command(
         name="control",
         description=get_default_command_description("control"),
-        description_localizations=get_command_description("control")
+        description_localizations=get_command_description("control"),
     )
-    @commands.has_permissions(administrator=True)
     async def control(self, ctx: ApplicationContext):
         lang = get_lang(ctx.locale)
         view = AdminMainView(
