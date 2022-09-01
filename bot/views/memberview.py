@@ -178,7 +178,7 @@ class EditRoleSelect(Select):
             )
             await interaction.response.edit_message(embed=Embed(color=Color.green(), title=message.format(role.name)), view=view)
         except errors.Forbidden:
-            await interaction.response.edit_message(embed=None, view=None, content=self.lang["error"]["permisson"])
+            await interaction.response.edit_message(embed=None, view=None, content=self.lang["error"]["permission"])
 
     def get_instance(lang: dict, roles: list[int], guild_roles: list[Role], guild_id: int, member_roles: list[Role]):
         options = get_select_options(

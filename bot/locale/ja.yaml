@@ -54,5 +54,6 @@ member:
       enable: 有効
       disable: 無効
 error:
-  permisson: 権限によりエラーです。管理者に問い合わせて正しく設定されているか確認してください。
+  permission: 権限によりエラーです。管理者に問い合わせて正しく設定されているか確認してください。
   zerolength: 管理対象ロールに設定されているロールがゼロです。
+  admincommand: このコマンドは管理者専用です。

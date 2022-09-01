@@ -54,5 +54,6 @@ member:
       enable: enable
       disable: disable
 error:
-  permisson: Error due to authorization. Contact your administrator to verify that the settings are correct.
+  permission: Error due to authorization. Contact your administrator to verify that the settings are correct.
   zerolength: There are zero roles set for managed roles.
+  admincommand: This command is for administrators only.

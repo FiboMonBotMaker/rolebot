@@ -2,9 +2,8 @@ from views.adminview import AdminMainView
 from views.memberview import MemberMainView, RoleListEmbed
 from discord.commands import SlashCommandGroup
 from discord.ext import commands
-from discord import ApplicationContext, Embed, Color, Permissions
+from discord import ApplicationContext, Embed, Color
 from lib.locale import get_command_description, get_default_command_description, get_lang
-Permissions.administrator
 
 
 class LanaNealsen(commands.Cog):
@@ -54,6 +53,15 @@ class LanaNealsen(commands.Cog):
         )
         await ctx.respond(embed=Embed(color=Color.green(), title=lang['admin']['main']['title']), view=view, ephemeral=True)
 
+    # @admin.command(
+    #     name="set_panel",
+    #     description=get_default_command_description("set_panel"),
+    #     description_localizations=get_command_description("set_panel"),
+    # )
+    # async def set_panel(self, ctx: ApplicationContext):
+    #     lang = get_lang(ctx.locale)
+    #     ctx.respond("test")
 
-def setup(bot):
+
+def setup(bot: commands.Bot):
     bot.add_cog(LanaNealsen(bot))
