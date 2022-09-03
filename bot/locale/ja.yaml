@@ -29,6 +29,11 @@ admin:
       rolecolor:
         title: ロールの色
         placeholder: FF0000
+      mention: メンションの設定
+      button:
+        enable: "メンション: 有効"
+        disable: "メンション: 無効"
+        create: 作成
       execute: ロールを作成しました！
   remove:
     title: *remove

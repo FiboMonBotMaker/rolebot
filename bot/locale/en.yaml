@@ -29,7 +29,12 @@ admin:
       rolecolor:
         title: Role color
         placeholder: FF0000
-      execute: Created role
+      mention: Mentionable setting
+      button:
+        enable: "mention: enable"
+        disable: "mention: disable"
+        create: Create
+      execute: Created role!
   remove:
     title: *remove
     select:
