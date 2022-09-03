@@ -1,3 +1,5 @@
 # rolebot
 
 DiscordでRoleを管理するBOTです
+
+比較的操作しやすいインターフェースにするためDiscordのUIキットを利用しています。
